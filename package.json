@@ -5,7 +5,11 @@
   "main": "app.js",
   "scripts": {
     "test": "nodemon app",
-    "start": "node app.js"
+    "start": "node app.js",
+    "dev": "concurrently \"npm run dev:server\" \"npm run dev:client\"",
+    "dev:server": "nodemon app",
+    "dev:client": "cd client && yarn start",
+    "heroku-postbuild":"cd client && npm install && npm run build"
   },
   "keywords": [
     "express"
