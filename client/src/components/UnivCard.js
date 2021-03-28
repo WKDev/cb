@@ -1,40 +1,37 @@
-import React, { useState } from 'react'
-import Card from 'react-bootstrap/Card'
-import Accordion from 'react-bootstrap/Accordion'
-import TitleSet from './elements/TitleSet'
-import Collapse from 'react-bootstrap/Collapse'
+import React from "react";
+import Card from "react-bootstrap/Card";
+// import Accordion from 'react-bootstrap/Accordion'
+import TitleSet from "./elements/TitleSet";
 
-import './UnivCard.css'
+import "./UnivCard.css";
 
 const UnivCard = (props, { children }) => {
-    const defaultAdditionalContent = () => {
-        return <div></div>
-    }
+  const defaultAdditionalContent = () => {
+    return <div></div>;
+  };
 
-    UnivCard.defaultProps = {
-        additionalContent: defaultAdditionalContent(),
-    }
+  UnivCard.defaultProps = {
+    additionalContent: defaultAdditionalContent(),
+  };
 
-    return (
-        <Card style={{ width: '16rem' }}>
-            {/* <Card.Img variant="top" src={props.image} alt="img" /> */}
-            <Card.Body>
-                <Card.Title>
-                    {
-                        <TitleSet
-                            isOn={props.ledOn}
-                            title={props.title}
-                            onSettingClick={props.onSettingClick}
-                        />
-                    }
-                </Card.Title>
-                <Card.Subtitle className="mb-2 text-muted">
-                    {props.mode}
-                </Card.Subtitle>
-                {props.content}
-                <Card.Text></Card.Text>
-            </Card.Body>
-            {/* {props.accordion === true && (
+  return (
+    <Card style={{ width: "16rem" }}>
+      {/* <Card.Img variant="top" src={props.image} alt="img" /> */}
+      <Card.Body>
+        <Card.Title>
+          {
+            <TitleSet
+              isOn={props.ledOn}
+              title={props.title}
+              onSettingClick={props.onSettingClick}
+            />
+          }
+        </Card.Title>
+        <Card.Subtitle className="mb-2 text-muted">{props.mode}</Card.Subtitle>
+        {props.content}
+        <Card.Text></Card.Text>
+      </Card.Body>
+      {/* {props.accordion === true && (
                 // <Accordion defaultActiveKey="0">
                 //     <Card>
                 //         <Card.Header>{props.additionalContent}</Card.Header>
@@ -48,8 +45,8 @@ const UnivCard = (props, { children }) => {
                 // </Accordion>
                 // <Collapse in={true}>{props.additionalContent}</Collapse>
             )} */}
-        </Card>
-    )
-}
+    </Card>
+  );
+};
 
-export default UnivCard
+export default UnivCard;

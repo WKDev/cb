@@ -1,5 +1,5 @@
 const express = require("express"); // Express 서버
-const cors = require("cors"); // 통신 간 보안 문제 해결을 위해 포함됨
+const cors = require("cors"); // 서버-클라이언트 통신간 중복되는 문제를 해결하기 위해 포함됨
 const session = require("express-session"); // 세션 처리
 const dotenv = require("dotenv"); // key 값 보관하고 관리하는 데 사용됨. 지금은 사용 안하는중
 const path = require("path"); // static한 파일(React Build 폴더)에 접근할 수 있도록 Route 설정하는데 필요
@@ -29,9 +29,9 @@ app.use(indexRouter);
 app.use("/users", usersRouter);
 
 //인증 여부 확인
-app.post("/ref_sess", (req, res) => {
+app.get("/", (req, res) => {
   var sess = req.session;
-  sess.save();
+  // sess.save(); // 세션 저장
 
   if (sess.phone) {
     res.json({
@@ -43,11 +43,7 @@ app.post("/ref_sess", (req, res) => {
       valid: sess.valid,
     });
   } else {
-    res.json({
-      isAuthorized: "0",
-      code: "400",
-      result: "login failed",
-    });
+    res.redirect("/login");
   }
 });
 
@@ -58,9 +54,11 @@ const port = process.env.PORT || 5000;
 app.listen(port, () => console.log(`listening on port ${port}!`));
 
 //React Static 파일 제공하기
-app.use(express.static(path.join(__dirname, "client/build")));
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static(path.join(__dirname, "client/build")));
+}
 
 // 라우트 설정
 app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname + "/client/build/index.html"));
+  res.sendFile(path.join(__dirname + "/client/build", "index.html"));
 });
