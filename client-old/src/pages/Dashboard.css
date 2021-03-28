@@ -1,0 +1,7 @@
+.content-box-fluid {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 5px;
+    padding-top: 10px;
+    align-items: flex-start;
+}

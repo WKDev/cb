@@ -1,0 +1,20 @@
+src/
+    component : 컴포넌트들이 위치하는 디렉터리
+    pages : 라우트들이 위치하는 디렉터리
+    client : 브라우저 측에서 사용할 최상위 컴포넌트, 서버사이드 렌더링을 하기 위해 디렉터 따로 구분. 여기서 라우터 설정
+    server : 서버측에서 사용할 리액트 관련 코드
+    shared : 서버와 클라이언트에서 공요으로 사용되는 컴포넌트 App.js 여기 위치함
+    lib : 나중에 웹 연동 구현시 사용할 api와 코드스플리팅할 때 필요한 코드
+
+* node_env : 코드 불러올 때 ../ 안써도 되도록 함.package.json scripts--> start, build부분 수정함
+
+*https://velopert.com/3417 리액트라우터는 이걸 보고 시도함
+
+라우트로 설정한 컴포넌트는 세 가지의 props 전달 받게 됨.
+history : push, replace 등을 통해 다른 경로 이동 or 앞 뒤 페이지 전환
+
+location : 현재 경로에 대한 정보 + url 쿼리(/about?foo=bar)정보
+match : 어떤 라우트에 매칭되었는지,params 정보
+
+* 라우트 이동을 위해선 리액트 라우터에 있는 Link 컴포넌트를 사용해야 한다.
+

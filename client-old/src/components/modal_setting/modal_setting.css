@@ -1,0 +1,36 @@
+.mode-radio {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.light-wrap {
+    margin-top: 10px;
+}
+
+#collapse-text {
+    margin-top: 10px;
+    font-size: 1.5rem;
+}
+
+/* Solid border */
+hr.solid {
+    border-top: 3px solid #bbb;
+}
+
+/* timer_section */
+.timer-wrap {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+/* timer_section */
+.time-picker-wrap {
+    margin: 0 auto;
+    margin-top: 15px;
+}
+
+.time-picker-label {
+    display: flex;
+    flex-wrap: nowrap;
+}
