@@ -5,4 +5,7 @@ var router = express.Router();
 //   res.end("Welcome! This is Cranberry BackendServer!");
 // });
 
+router.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname + "/client/build", "index.html"));
+});
 module.exports = router;

@@ -26,26 +26,7 @@ app.use(express.urlencoded({ extended: true }));
 var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
 app.use(indexRouter);
-app.use("/users", usersRouter);
-
-//인증 여부 확인
-app.get("/", (req, res) => {
-  var sess = req.session;
-  // sess.save(); // 세션 저장
-
-  if (sess.phone) {
-    res.json({
-      isAuthorized: "1",
-      code: "200",
-      result: "login success",
-      phone: sess.phone,
-      purpose: sess.purpose,
-      valid: sess.valid,
-    });
-  } else {
-    res.redirect("/login");
-  }
-});
+app.use("/api/users", usersRouter);
 
 // portnumber를 5000으로 지정
 const port = process.env.PORT || 5000;
@@ -59,6 +40,3 @@ if (process.env.NODE_ENV === "production") {
 }
 
 // 라우트 설정
-app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname + "/client/build", "index.html"));
-});

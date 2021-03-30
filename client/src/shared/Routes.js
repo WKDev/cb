@@ -16,7 +16,7 @@ const App = () => {
       headers: { "Content-Type": "application/json" },
     };
 
-    fetch("/ref_sess", requestOptions)
+    fetch("/", requestOptions)
       .then((res) => res.json())
       .then((users) => {
         console.log("in app_sessCheck");
@@ -33,11 +33,12 @@ const App = () => {
           <Dashboard />
         </Route>
 
-        <Route path="/login">
+        <Route path="/">
           <Login />
         </Route>
       </Switch>
       {/* <Route exact path="/about:name" component={About} /> */}
+      {/* <Route exact path="/" component={<p>test</p>} /> */}
     </div>
   );
 };
