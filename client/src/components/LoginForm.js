@@ -124,7 +124,7 @@ const LoginForm = (props) => {
       }),
     };
 
-    fetch("/users/code_check", requestOptions)
+    fetch("/api/users/code_check", requestOptions)
       .then((res) => res.json())
       .then((result) => {
         console.log(result);
