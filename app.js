@@ -23,9 +23,9 @@ app.use(
 
 //Router 설정
 app.use(express.urlencoded({ extended: true }));
-var indexRouter = require("./routes/index");
+// var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
-app.use(indexRouter);
+// app.use(indexRouter);
 app.use("/api/users", usersRouter);
 
 // portnumber를 5000으로 지정
@@ -35,8 +35,9 @@ const port = process.env.PORT || 5000;
 app.listen(port, () => console.log(`listening on port ${port}!`));
 
 //React Static 파일 제공하기
-if (process.env.NODE_ENV === "production") {
-  app.use(express.static(path.join(__dirname, "client/build")));
-}
+app.use(express.static(path.join(__dirname, "client/build")));
 
+app.get("/", function (req, res, next) {
+  res.sendFile(path.join(__dirname + "/client/build", "index.html"));
+});
 // 라우트 설정

@@ -75,8 +75,6 @@ router.get("/session_check", (req, res) => {
     });
   } else {
     console.log("sess_not_exist : " + sess.phone);
-
-    res.redirect("/login");
   }
 });
 

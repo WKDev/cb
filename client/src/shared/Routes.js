@@ -16,7 +16,7 @@ const App = () => {
       headers: { "Content-Type": "application/json" },
     };
 
-    fetch("/", requestOptions)
+    fetch("/api/users/session_check", requestOptions)
       .then((res) => res.json())
       .then((users) => {
         console.log("in app_sessCheck");

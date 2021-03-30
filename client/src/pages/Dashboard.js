@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import UnivCard from "../components/UnivCard";
-import ROSLIB from "roslib";
 import NavigationBar from "../components/bar/NavigationBar";
 import StatusBar from "../components/bar/StatusBar";
 import Container from "react-bootstrap/Container";
@@ -11,8 +10,6 @@ import "./Dashboard.css";
 import BoilerContent from "../components/card_content/BoilerContent";
 import AOContent from "../components/card_content/AOContent";
 import CommonModal from "../components/card_content/CommonModal";
-
-var ros = new ROSLIB.Ros();
 
 const Dashboard = () => {
   const [data, setData] = useState("phone_not_yet_set");
@@ -39,41 +36,41 @@ const Dashboard = () => {
   // }, [])
 
   useEffect(() => {
-    handleROS();
+    // handleROS();
   }, [temp, humid]);
 
-  const handleROS = () => {
-    ros.connect("ws://10.211.55.3:9090/");
-    // ros.connect('ws://roswebsocket.iptime.org:9090/')
+  // const handleROS = () => {
+  //   ros.connect("ws://10.211.55.3:9090/");
+  //   // ros.connect('ws://roswebsocket.iptime.org:9090/')
 
-    ros.on("error", function (error) {
-      console.log(error);
-    });
+  //   ros.on("error", function (error) {
+  //     console.log(error);
+  //   });
 
-    ros.on("connection", function () {
-      console.log("Connection made!");
-    });
+  //   ros.on("connection", function () {
+  //     console.log("Connection made!");
+  //   });
 
-    ros.on("close", function () {
-      console.log("Connection closed.");
-    });
-  };
+  //   ros.on("close", function () {
+  //     console.log("Connection closed.");
+  //   });
+  // };
 
-  function update_ac() {
-    var ac_data_subscriber = new ROSLIB.Topic({
-      ros: ros,
-      name: "/ac_msg",
-      messageType: "cbt/AcData",
-    });
+  // function update_ac() {
+  //   var ac_data_subscriber = new ROSLIB.Topic({
+  //     ros: ros,
+  //     name: "/ac_msg",
+  //     messageType: "cbt/AcData",
+  //   });
 
-    // Then we add a callback to be called every time a message is published on this topic.
-    ac_data_subscriber.subscribe(function (message) {
-      // console.log('Received message on ' + ac_data_subscriber.name + ': ' + message.temp + '  |  ' + message.humid);
+  //   // Then we add a callback to be called every time a message is published on this topic.
+  //   ac_data_subscriber.subscribe(function (message) {
+  //     // console.log('Received message on ' + ac_data_subscriber.name + ': ' + message.temp + '  |  ' + message.humid);
 
-      setTemp(message.temp.toFixed(1) + "°C");
-      setHumid(message.humid.toFixed(1) + "%");
-    });
-  }
+  //     setTemp(message.temp.toFixed(1) + "°C");
+  //     setHumid(message.humid.toFixed(1) + "%");
+  //   });
+  // }
 
   const handleLogout = () => {
     const requestOptions = {
