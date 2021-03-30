@@ -80,7 +80,7 @@ const Dashboard = () => {
         code: "logout",
       }),
     };
-    fetch("/users/logout", requestOptions)
+    fetch("/api/users/logout", requestOptions)
       .then((res) => res.json())
       .then((users) => {
         console.log("logout_success");
