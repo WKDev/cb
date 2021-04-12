@@ -8,15 +8,15 @@ Code for NodeMCU will be avaliable soon.
 
 "scripts" section in package.json at Root directory, You can see commands to run this app.
 
-### npm run dev:client
+### 'npm run dev:client'
 
 Starts React application served by Webpack.
 
-### npm run dev:server
+### 'npm run dev:server'
 
 Starts Express server.
 
-### npm run dev
+### 'npm run dev'
 
 Starts both of them concurrrently.
 
