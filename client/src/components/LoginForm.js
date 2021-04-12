@@ -168,11 +168,11 @@ const LoginForm = (props) => {
             style={{ marginTop: 10 + "px" }}
             invalid={!isValidSelect}
           >
-            <option value="def">방문목적을 선택해주세요</option>
-            <option value="elec">전기 검침</option>
-            <option value="tap">수도 검침</option>
-            <option value="inout">단순출입</option>
-            <option value="delivery">택배</option>
+            <option value="def">Why are you here to visit?</option>
+            <option value="elec">Eletricity</option>
+            <option value="tap">tap</option>
+            <option value="inout">inout</option>
+            <option value="delivery">delivery</option>
           </Input>
           <FormFeedback>방문 목적을 선택하세요</FormFeedback>
         </FormGroup>

@@ -1,6 +1,6 @@
 import "./Routes.css";
 import React, { useEffect, useState } from "react";
-
+import axios from "axios";
 import { Switch, Redirect, Route } from "react-router-dom";
 import { Dashboard, Login } from "../pages";
 
@@ -9,28 +9,28 @@ const App = () => {
 
   const [isAuthorized, setIsAuthorized] = useState(false);
 
-  //여기서 세션 확인이 안되면 로그인 페이지로 이동시키기
-  useEffect(() => {
-    const requestOptions = {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        request: "session",
-      }),
-    };
-
-    fetch("/api/users/session_check", requestOptions)
-      .then((res) => res.json())
-      .then((users) => {
-        console.log("in app_sessCheck");
-        setIsAuthorized(Boolean(parseInt(users.isAuthorized)));
-        console.log(isAuthorized);
+  async function searchApi() {
+    const url = "/api/users/session_check";
+    await axios
+      .get(url)
+      .then(function (res) {
+        console.log(res.data);
+        res.data.code === "200"
+          ? setIsAuthorized(true)
+          : setIsAuthorized(false);
+      })
+      .catch(function (error) {
+        console.log("세션 존재하지 않음");
       });
-  });
+  }
+
+  useEffect(() => {
+    searchApi();
+  }, []);
+
   return (
     <div>
       {isAuthorized ? <Redirect to="/dashboard" /> : <Redirect to="/login" />}
-
       <Switch>
         <Route path="/dashboard">
           <Dashboard />
@@ -40,7 +40,7 @@ const App = () => {
           <Login />
         </Route>
       </Switch>
-      {/* <Route exact path="/about:name" component={About} /> */}
+      {/* <Route exact path="/login" component={Login} /> */}
       {/* <Route exact path="/" component={<p>test</p>} /> */}
     </div>
   );
