@@ -136,6 +136,12 @@ const LoginForm = (props) => {
       });
   };
 
+  const handleAuthPress = (e) => {
+    if (e.key === "Enter") {
+      handleAuth();
+    }
+  };
+
   return (
     <div className="form-signin">
       <Collapse isOpen={alertOpen}>
@@ -188,6 +194,7 @@ const LoginForm = (props) => {
           type="number"
           value={input_code}
           onChange={onChangeAuth}
+          onKeyPress={handleAuthPress}
           placeholder="authcode"
           required
         />

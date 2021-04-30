@@ -15,7 +15,7 @@ const UnivCard = (props, { children }) => {
   };
 
   return (
-    <Card style={{ width: "16rem" }}>
+    <Card className="univ-card">
       {/* <Card.Img variant="top" src={props.image} alt="img" /> */}
       <Card.Body>
         <Card.Title>

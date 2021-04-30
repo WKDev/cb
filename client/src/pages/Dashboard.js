@@ -1,8 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { useHistory } from "react-router-dom";
+import React, { useEffect, useRef, useState } from "react";
 import UnivCard from "../components/UnivCard";
-import NavigationBar from "../components/bar/NavigationBar";
-import StatusBar from "../components/bar/StatusBar";
 import Container from "react-bootstrap/Container";
 import TempContent from "../components/card_content/TempContent";
 import LightContent from "../components/card_content/LightContent";
@@ -11,59 +8,94 @@ import BoilerContent from "../components/card_content/BoilerContent";
 import AOContent from "../components/card_content/AOContent";
 import CommonModal from "../components/card_content/CommonModal";
 import axios from "axios";
+import bg from "../components/assets/living-room-def.jpg";
+import Toast from "react-bootstrap/Toast";
+
+// Dan's useInterval hook https://overreacted.io/making-setinterval-declarative-with-react-hooks/
+function useInterval(callback, delay) {
+  const savedCallback = useRef();
+
+  // Remember the latest callback.
+  useEffect(() => {
+    savedCallback.current = callback;
+  }, [callback]);
+
+  // Set up the interval.
+  useEffect(() => {
+    function tick() {
+      savedCallback.current();
+    }
+    if (delay !== null) {
+      let id = setInterval(tick, delay);
+      return () => clearInterval(id);
+    }
+  }, [delay]);
+}
 
 const Dashboard = () => {
-  const [data, setData] = useState("phone_not_yet_set");
-  const [temp, setTemp] = useState("NN °C");
-  const [humid, setHumid] = useState("NN %");
+  const [temp, setTemp] = useState("");
+  const [humid, setHumid] = useState("");
   const [tempLED, setTempLED] = useState(false);
   const [cardType, setCardType] = useState("");
   const [showModal, setShowModal] = useState(false);
 
-  const history = useHistory();
+  // initial fetch data
+  useEffect(() => {
+    tempApi();
+    return () => {};
+  }, []);
 
-  const handleLogout = () => {
-    const requestOptions = {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        code: "logout",
-      }),
-    };
-    fetch("/api/users/logout", requestOptions)
-      .then((res) => res.json())
-      .then((res) => {
-        console.log("logout_success");
-        history.push("/login");
-      });
-  };
-
+  //it updated when one of elements are updated. this it not efficient at all. so i'd be improve the code.
   async function tempApi() {
     const url = "/api/iot/acdata";
-    await axios
-      .get(url)
-      .then(function (res) {
-        console.log(res.data);
-        return () => {
-          setTemp(data.temp);
-          setHumid(data.humid);
-          setTempLED(false);
-        };
+    // axios
+    //   .get(url)
+    //   .then(function (res) {
+    //     console.log(res.data);
+    //     setTemp(res.data.temp);
+    //     setHumid(res.data.humid);
+    //     setTempLED(true);
+    //     return () => {
+    //       setTemp(res.data.temp);
+    //       setHumid(res.data.humid);
+    //       setTempLED(true);
+    //     };
+    //   })
+    //   .catch(function (error) {
+    //     console.log("실패");
+    //     setTempLED(false);
+    //   });
+
+    await fetch(url)
+      .then((res) => res.json())
+      .then((res) => {
+        // console.log(res.code);
+        setTemp(res.temp);
+        setHumid(res.humid);
+        setTempLED(true);
       })
-      .catch(function (error) {
-        console.log("실패");
+      .catch((error) => {
+        console.log("Error occured importing ACData!");
         setTempLED(false);
       });
   }
-  tempApi();
 
+  /////will be constitutied
   const triggerModal = (type) => {
     setShowModal(true);
     setCardType(type);
   };
 
+  // Run every second
+  const delay = 5000;
+
+  useInterval(() => {
+    // Make the request here
+    /////////////////////////////MAKE THE REQUEST HERE!!!!1
+    tempApi();
+  }, delay);
   return (
-    <div>
+    <div style={{ height: "100%" }}>
       <CommonModal
         show={showModal}
         close={() => {
@@ -71,28 +103,20 @@ const Dashboard = () => {
         }}
         cardType={cardType}
       />
-      <NavigationBar phone={"phone_not_yet_set"} />
-      <StatusBar phone={"phone_not_yet_set"} logout={handleLogout} />
-      <Container fluid bsPrefix="content-box" className="content-box">
+      <div className="content-box">
         <UnivCard
           ledOn={tempLED}
           mode={"Developing"}
           title={"Indoor"}
-          content={<TempContent temp={temp} humid={humid} />}
-          onSettingClick={() => {
-            setShowModal(true);
-            setCardType("Indoor");
-          }}
+          content={<TempContent temp={temp + "°C"} humid={humid + "%"} />}
+          onSettingClick={() => triggerModal("Indoor")}
         />
         <UnivCard
           ledOn={true}
           mode={"Developing"}
           title={"Outside"}
-          content={<TempContent temp={"25"} humid={"60%"} />}
-          onSettingClick={() => {
-            setShowModal(true);
-            setCardType("Outside");
-          }}
+          content={<TempContent temp={"25"} humid={"60"} />}
+          onSettingClick={() => triggerModal("Outside")}
         />
         <UnivCard
           title={"Light"}
@@ -113,7 +137,8 @@ const Dashboard = () => {
           mode={"subtitle"}
           content={<AOContent />}
         />
-      </Container>
+        <UnivCard title={"Door"} mode={"Developing"} content={<AOContent />} />
+      </div>
     </div>
   );
 };

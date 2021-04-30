@@ -1,6 +1,10 @@
 .stat-bar {
-    height: 2rem;
-    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
-    padding-left: 1rem;
-    padding-right: 1rem;
+  height: 2rem;
+  /* box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px; */
+  padding-left: 1rem;
+  padding-right: 1rem;
+  background: rgba(255, 255, 255, 0.7) !important;
+  box-shadow: 0 3px 8px 0 rgba(82, 82, 82, 0.37) !important;
+  backdrop-filter: blur(6px) !important;
+  -webkit-backdrop-filter: blur(6px) !important;
 }

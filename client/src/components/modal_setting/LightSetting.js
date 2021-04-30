@@ -44,7 +44,7 @@ const LightSetting = () => {
       <div>
         <Collapse in={radioValue === "1"}>
           <div>
-            <hr class="solid" />
+            <hr className="solid" />
 
             <div id="collapse-text">Turns on whole light.</div>
           </div>
@@ -54,7 +54,7 @@ const LightSetting = () => {
         {/* OFF */}
         <Collapse in={radioValue === "2"}>
           <div>
-            <hr class="solid" />
+            <hr className="solid" />
 
             <div id="collapse-text">Turns off whole light.</div>
           </div>
@@ -112,7 +112,7 @@ const LightSetting = () => {
                   <TimePicker onChange={onChange} value={value} />
                 </div>
               </div>
-              <hr class="solid" />
+              <hr className="solid" />
 
               <div id="collapse-text">Lights works at the set time.</div>
             </div>

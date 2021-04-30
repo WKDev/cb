@@ -1,0 +1,10 @@
+.row {
+  justify-content: space-around !important;
+}
+.ac_stat {
+  background-color: #fafafa;
+}
+.ac_table {
+  width: 600px;
+  flex-basis: 600px;
+}
