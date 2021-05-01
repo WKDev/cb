@@ -1,0 +1,31 @@
+{
+  "files": {
+    "main.css": "/static/css/main.d7c207db.chunk.css",
+    "main.js": "/static/js/main.7f9110f3.chunk.js",
+    "main.js.map": "/static/js/main.7f9110f3.chunk.js.map",
+    "runtime-main.js": "/static/js/runtime-main.1231c4c9.js",
+    "runtime-main.js.map": "/static/js/runtime-main.1231c4c9.js.map",
+    "static/css/2.9579bb87.chunk.css": "/static/css/2.9579bb87.chunk.css",
+    "static/js/2.baf38117.chunk.js": "/static/js/2.baf38117.chunk.js",
+    "static/js/2.baf38117.chunk.js.map": "/static/js/2.baf38117.chunk.js.map",
+    "static/js/3.944f48d2.chunk.js": "/static/js/3.944f48d2.chunk.js",
+    "static/js/3.944f48d2.chunk.js.map": "/static/js/3.944f48d2.chunk.js.map",
+    "index.html": "/index.html",
+    "static/css/2.9579bb87.chunk.css.map": "/static/css/2.9579bb87.chunk.css.map",
+    "static/css/main.d7c207db.chunk.css.map": "/static/css/main.d7c207db.chunk.css.map",
+    "static/js/2.baf38117.chunk.js.LICENSE.txt": "/static/js/2.baf38117.chunk.js.LICENSE.txt",
+    "static/media/arrow_icon.6722e7ab.svg": "/static/media/arrow_icon.6722e7ab.svg",
+    "static/media/clock.f875670c.svg": "/static/media/clock.f875670c.svg",
+    "static/media/cranberry-logo.73c56751.png": "/static/media/cranberry-logo.73c56751.png",
+    "static/media/index.css": "/static/media/home4.084c2fca.jpg",
+    "static/media/living-room-def.764d13ca.jpg": "/static/media/living-room-def.764d13ca.jpg",
+    "static/media/setting_icon.5a0c0798.svg": "/static/media/setting_icon.5a0c0798.svg"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.1231c4c9.js",
+    "static/css/2.9579bb87.chunk.css",
+    "static/js/2.baf38117.chunk.js",
+    "static/css/main.d7c207db.chunk.css",
+    "static/js/main.7f9110f3.chunk.js"
+  ]
+}

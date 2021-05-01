@@ -1,26 +1,31 @@
 import "./Routes.css";
-import React, { useEffect, useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import axios from "axios";
 import { Switch, Redirect, Route, Router } from "react-router-dom";
 import { Dashboard, Login, Management } from "../pages";
 import Mainpage from "../pages/Mainpage";
 import AuthRoute from "./AuthRoute";
 
+import { useHistory } from "react-router-dom";
+
 const App = () => {
   //어느 세션으로 보낼 지 선택
 
   const [isAuthorized, setIsAuthorized] = useState(false);
   const [accountInfo, setAccountInfo] = useState("");
-  async function sessionCheckApi() {
+  const [expire, setExpire] = useState(600);
+  function sessionCheckApi() {
     const url = "/api/users/session_check";
-    await axios
+    axios
       .get(url)
       .then(function (res) {
         // console.log(res.data);
         if (res.data.code === "200") {
+          var currDate = +new Date();
           setIsAuthorized(true);
           setAccountInfo(res.data.session);
-          // console.log(res.data);
+          setExpire((res.data.expires - currDate) / 1000);
+          console.log(res.data);
         } else {
           setIsAuthorized(false);
         }
@@ -34,23 +39,74 @@ const App = () => {
     sessionCheckApi();
   }, []);
 
+  function useInterval(callback, delay) {
+    const savedCallback = useRef();
+
+    // Remember the latest callback.
+    useEffect(() => {
+      savedCallback.current = callback;
+    }, [callback]);
+
+    // Set up the interval.
+    useEffect(() => {
+      function tick() {
+        savedCallback.current();
+      }
+      if (delay !== null) {
+        let id = setInterval(tick, delay);
+        return () => clearInterval(id);
+      }
+    }, [delay]);
+  }
+
+  useInterval(() => {
+    // 작동안함
+    if (parseInt(expire) === 0) {
+      handleLogout();
+    }
+    setExpire(expire - 1);
+  }, 1000);
+
+  const history = useHistory();
+
+  const handleLogout = () => {
+    const requestOptions = {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        code: "logout",
+      }),
+    };
+    fetch("/api/users/logout", requestOptions)
+      .then((res) => res.json())
+      .then((res) => {
+        console.log("logout_success");
+        setExpire(99999);
+        history.push("/login");
+      });
+  };
+
   return (
     <div style={{ height: "100%" }}>
       {/* {isAuthorized ? <Redirect to="/dashboard" /> : <Redirect to="/login" />} */}
       {/* <Switch> */}
+      {expire}
       <Route exact path="/dashboard">
-        <Mainpage pageType="dashboard" accountInfo={accountInfo} />
+        <Mainpage
+          pageType="dashboard"
+          accountInfo={accountInfo}
+          expire={expire}
+        />
       </Route>
       <Route exact path="/mgmt">
-        <Mainpage pageType="mgmt" accountInfo={accountInfo} />
+        <Mainpage pageType="mgmt" accountInfo={accountInfo} expire={expire} />
       </Route>
       <Route exact path="/login">
         <Login />
       </Route>
       <Route exact path="/about">
-        <Mainpage pageType="about" accountInfo={accountInfo} />
+        <Mainpage pageType="about" accountInfo={accountInfo} expire={expire} />
       </Route>
-
       <Route exact path="/">
         {isAuthorized ? <Redirect to="/dashboard" /> : <Login />}
       </Route>

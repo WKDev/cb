@@ -72,8 +72,10 @@ var sessionOptions = {
   resave: false,
   saveUninitialized: false,
   name: "my.connect.sid",
-  expires: new Date(Date.now() + 30 * 60 * 60 * 24 * 1000), // day, sec, min, hour, millisecond
-  maxAge: new Date(Date.now() + 30 * 60 * 60 * 24 * 1000), // day, sec, min, hour, millisecond
+  // expires: ), // day, sec, min, hour, millisecond
+  cookie: {
+    maxAge: 86400, // day, sec, min, hour, millisecond
+  },
 };
 //Session 설정
 router.use(session(sessionOptions));
@@ -93,6 +95,7 @@ router.use("/session_check", function (req, res) {
       msg: "session exists",
       code: "200",
       session: req.session.phone,
+      expires: req.session.valid,
     });
   } else {
     console.log("sess NOT exists");
@@ -103,45 +106,58 @@ router.use("/session_check", function (req, res) {
 router.post("/info_check", function (req, res, next) {
   // nodemon router을 사용하면 모니터링해서 변동사항 있을 시 자동 재시작.
   // console.log(req.body.phone + ' ' + req.body.purpose)
-
+  console.log(req.body);
   codeGenerator();
   // writeUserData('01010101010', 'inout')
   userRef
     .orderByChild("phone")
     .equalTo(req.body.phone)
     .once("value", (snapshot) => {
-      console.log(snapshot.val());
-      var isValid = true;
+      var isphoneValid = true;
+      var ispurposeValid = true;
 
-      if (snapshot.val() === null) {
-        // 데이터가 없는 경우
-        console.log("phone_not_exist");
+      if (snapshot.val() !== null) {
+        if (
+          snapshot.val()[Object.keys(snapshot.val())].phone !== req.body.phone
+        ) {
+          res.json({
+            code: "409",
+            status:
+              "Phone number is not registered. check the phone number again or contact with manager.",
+          });
+          isphoneValid = false;
+        }
+        if (
+          snapshot.val()[Object.keys(snapshot.val())].purpose !==
+          req.body.purpose
+        ) {
+          console.log("incorrect_purpose");
+          res.json({
+            code: "409",
+            status: "you are not approved for that purpose.",
+          });
+          ispurposeValid = false;
+        }
+
+        if (isphoneValid && ispurposeValid) {
+          authCode = codeGenerator();
+          console.log(authCode);
+
+          sendSMS(req.body.phone, authCode);
+          res.json({
+            code: "202",
+            status: "accepted",
+          });
+        }
+
+        // if (!isphoneValid && !ispurposeValid) {
+        //   res.json({ code: 500, msg: "error occured" });
+        // }
+      } else {
         res.json({
-          code: "409",
-          status: "phone_not exist",
-        });
-        isValid = false;
-      }
-      // if (
-      //   snapshot.val !== null &&
-      //   snapshot.val().purpose !== req.body.purpose
-      // ) {
-      //   console.log("incorrect_purpose");
-      //   res.json({
-      //     code: "409",
-      //     status: "incorrect_purpose",
-      //   });
-      //   isValid = false;
-      // }
-
-      if (isValid) {
-        authCode = codeGenerator();
-        console.log(authCode);
-
-        sendSMS(req.body.phone, authCode);
-        res.json({
-          code: "202",
-          status: "accepted",
+          code: 500,
+          status:
+            "firebase returned null. it seems that backend-server is currently unavailable",
         });
       }
     });
@@ -156,7 +172,8 @@ router.post("/code_check", (req, res, next) => {
     console.log(req.body.phone);
     req.session.phone = req.body.phone;
     req.session.purpose = req.body.purpose;
-    req.session.valid = +new Date();
+    req.session.valid = +new Date() + 5 * 60 * 1000;
+    req.session.cookie.expires = 10 * 60 * 1000;
     // sess.save();
     // req.session.save();
     res.json({
@@ -164,7 +181,7 @@ router.post("/code_check", (req, res, next) => {
       status: "Authentication Success!",
       phone: sess.phone,
       purpose: sess.purpose,
-      valid: sess.valid,
+      valid: sess.cookie.expires + +new Date(),
     });
   } else {
     res.json([

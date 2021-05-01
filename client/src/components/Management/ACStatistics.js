@@ -53,9 +53,8 @@ function ACData({ data }) {
 // }
 
 const ACStatistics = () => {
-  const [startDate, setStartDate] = useState(new Date());
-
   const [acdata, setAcData] = useState([]);
+
   const [chartData, setChartData] = useState({
     series: [
       {
@@ -93,55 +92,15 @@ const ACStatistics = () => {
       },
     },
   });
-  const [isOpen, setIsOpen] = useState(false);
-  const year = [2020, 2021];
-  const month = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
-  const day = [
-    1,
-    2,
-    3,
-    4,
-    5,
-    6,
-    7,
-    8,
-    9,
-    11,
-    12,
-    13,
-    14,
-    15,
-    16,
-    17,
-    18,
-    19,
-    20,
-    21,
-    22,
-    23,
-    24,
-    25,
-    26,
-    27,
-    28,
-    29,
-    30,
-    31,
-  ];
 
+  const [isOpen, setIsOpen] = useState(false);
   const [dRange, setDRange] = useState([
     {
-      startDate: new Date(),
-      endDate: addDays(new Date(), 7),
+      startDate: new Date(+new Date() - 1000 * 60 * 60 * 24),
+      endDate: new Date(),
       key: "selection",
     },
   ]);
-  const handleSelect = (e) => {
-    let tempArr = [...startDate];
-    tempArr[e.target.id] = e.target.value;
-    setStartDate(tempArr);
-    console.log(startDate);
-  };
 
   const handleClick = (e) => {
     if (e.target.id === "custom") {
@@ -153,13 +112,20 @@ const ACStatistics = () => {
     }
   };
 
-  const handleDate = (date) => {
-    console.log(date);
+  const onDateChange = (item) => {
+    fetchACDataApi();
+    setDRange([item.selection]);
+    // console.log("start:", new Date(dRange[0].startDate));
+    // console.log("end:", new Date(dRange[0].endDate));
+
+    // console.log(new Date(dRange[0].startDate).getTime());
   };
+
   useEffect(() => {
-    fetchACDataApi(0.5);
+    fetchACDataApi();
   }, []);
 
+  // updates chart data.
   useEffect(() => {
     setChartData({
       series: [
@@ -254,13 +220,13 @@ const ACStatistics = () => {
     });
   }, [acdata]);
 
-  function fetchACDataApi(startTime) {
+  function fetchACDataApi() {
     const requestOptions = {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        from: +new Date() - 1000 * 60 * 60 * 24 * startTime,
-        until: +new Date(),
+        from: new Date(dRange[0].startDate).getTime(),
+        until: new Date(dRange[0].endDate).getTime(),
       }),
     };
 
@@ -290,68 +256,41 @@ const ACStatistics = () => {
     <div className="ac_stat">
       <h3>AC Statistics</h3>
       {/* <Container> */}
-      <Row>
+      <Row style={{}}>
         <Col md={6}>
           <Chart
             options={chartData.options}
             series={chartData.series}
             type={chartData.options.chart.type}
-            width="500"
+            width="100%"
           />
         </Col>
         <Col md={6} className="ac_table">
-          <ButtonGroup aria-label="Basic example">
-            <Button variant="secondary" id="1" onClick={handleClick}>
-              Day
-            </Button>
-            <Button variant="secondary" id="7" onClick={handleClick}>
-              Week
-            </Button>
-            <Button variant="secondary" id="30" onClick={handleClick}>
-              Month
-            </Button>
-            <Button variant="secondary" id="custom" onClick={handleClick}>
-              Custom
-            </Button>
-          </ButtonGroup>
-          <Collapse in={isOpen}>
-            <Row>
-              {/*set query term */}
-              <Col lg={1}>
-                <span>From:</span>
-              </Col>
-              <Col lg={4} style={{ display: "flex", flexWrap: "0" }}>
-                <DateRangePicker
-                  onChange={(item) => setDRange([item.selection])}
-                  showSelectionPreview={false}
-                  moveRangeOnFirstSelection={false}
-                  months={1}
-                  ranges={dRange}
-                  direction="vertical"
-                />
-              </Col>
-              <Col md={1}>
-                <Button size="sm">Done</Button>
-              </Col>
-            </Row>
-          </Collapse>
-
-          <Row className="Index">
-            <Col sm={6}>
-              <b>Measured Date </b>
-            </Col>
-            <Col sm={3}>
-              <b>Temp</b>
-            </Col>
-            <Col sm={3}>
-              <b>Humidity</b>
-            </Col>
-          </Row>
-          {acdata.map((res) => {
-            return <ACData data={res} key={res.timestamp} />;
-          })}
+          <DateRangePicker
+            editableDateInputs={true}
+            onChange={onDateChange}
+            showSelectionPreview={false}
+            moveRangeOnFirstSelection={false}
+            months={1}
+            ranges={dRange}
+            direction="vertical"
+          />
         </Col>
       </Row>
+      <Row className="Index">
+        <Col sm={6}>
+          <b>Measured Date </b>
+        </Col>
+        <Col sm={3}>
+          <b>Temp</b>
+        </Col>
+        <Col sm={3}>
+          <b>Humidity</b>
+        </Col>
+      </Row>
+      {acdata.map((res) => {
+        return <ACData data={res} key={res.timestamp} />;
+      })}
       {/* </Container> */}
     </div>
   );

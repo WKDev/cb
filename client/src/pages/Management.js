@@ -9,7 +9,7 @@ import Input from "react-bootstrap/InputGroup";
 import Nav from "react-bootstrap/Nav";
 import ApprovedUsers from "../components/Management/ApprovedUsers";
 const Management = () => {
-  const [contentType, setContentType] = useState("users");
+  const [contentType, setContentType] = useState("acstat");
 
   const handleClick = (e) => {
     setContentType(e.target.id);
@@ -17,10 +17,10 @@ const Management = () => {
 
   return (
     <Container fluid style={{ height: "100% !important" }}>
-      <Row style={{ height: "100% !important" }}>
+      <Row style={{ height: "100% !important", backgroundColor: "white" }}>
         <Col
           lg={2}
-          style={{ height: "100% !important", backgroundColor: "#f7f7f7" }}
+          style={{ height: "100% !important", backgroundColor: "#fafafa" }}
         >
           {/* <ListGroup variant="flush">
             <ListGroup.Item id="acstat" action onClick={handleClick}>

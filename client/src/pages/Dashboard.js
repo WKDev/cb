@@ -94,6 +94,7 @@ const Dashboard = () => {
     /////////////////////////////MAKE THE REQUEST HERE!!!!1
     tempApi();
   }, delay);
+
   return (
     <div style={{ height: "100%" }}>
       <CommonModal

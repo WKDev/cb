@@ -9,12 +9,12 @@ import { Button } from "react-bootstrap";
 import Modal from "react-bootstrap/Modal";
 import Alert from "react-bootstrap/Alert";
 import { formatDiagnosticsWithColorAndContext } from "typescript";
-
+import ButtonGroup from "react-bootstrap/ButtonGroup";
 function UserData({ data }) {
   return (
     <Row>
       <Col sm={3}>
-        <span>{data.valid_until}</span>
+        <span>{typeof data.valid_until}</span>
       </Col>
       <Col sm={3}>
         <span>{data.phone}</span>
@@ -33,11 +33,11 @@ function UserData({ data }) {
 }
 
 const ApprovedUsers = () => {
+  const [userData, setUserData] = useState([]);
+
   useEffect(() => {
     userApi("fetch");
   }, []);
-
-  const [userData, setUserData] = useState([]);
 
   // 유저 데이터 관련 함수
   function userApi(type) {
@@ -46,10 +46,15 @@ const ApprovedUsers = () => {
       fetch("/api/iot/fetchdata/approvedusers")
         .then((res) => res.json())
         .then((res) => {
-          for (let i of Object.keys(res)) {
-            setUserData((userData) => [...userData, res[i]]);
+          if (res !== null) {
+            setUserData(
+              Object.keys(res).map((v) => {
+                return res[v];
+              })
+            );
+
+            console.log("test", userData);
           }
-          console.log(userData);
         });
     }
     if (type === "update") {
@@ -229,14 +234,12 @@ const ApprovedUsers = () => {
           </Col>
           <Col md={1}></Col>
           <Col md={1}>
-            <Button variant="info" onClick={toggleModal}>
-              +
-            </Button>
-          </Col>
-          <Col md={1}>
-            <Button variant="danger" onClick={toggleModal}>
-              remove
-            </Button>
+            <ButtonGroup aria-label="Basic example">
+              <Button variant="danger">-</Button>
+              <Button variant="outline-dark" onClick={toggleModal}>
+                +
+              </Button>
+            </ButtonGroup>
           </Col>
         </Row>
         <Row>
