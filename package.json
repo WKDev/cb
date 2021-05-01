@@ -2,7 +2,7 @@
   "name": "cranberry_backend",
   "version": "1.0.0",
   "description": "backend express server for cranberry homeIoTSystem",
-  "main": "index.ts",
+  "main": "app.js",
   "scripts": {
     "test": "nodemon app",
     "start": "node app.js",
