@@ -1,4 +1,4 @@
-const USE_SOLAPI = false;
+const USE_SOLAPI = true;
 // const cors = require("cors"); // 서버-클라이언트 통신간 중복되는 문제를 해결하기 위해 포함됨
 // const dotenv = require("dotenv"); // key 값 보관하고 관리하는 데 사용됨. 지금은 사용 안하는중
 const express = require("express");
